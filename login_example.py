@@ -66,8 +66,6 @@ def login_page():
 def create_account():
     return render_template('createAcc.html')
 
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
