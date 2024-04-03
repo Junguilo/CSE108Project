@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Management System</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='web.css') }}">
+    <script src="{{ url_for('static', filename='loginP.js') }}"></script>
+</head>
+<body class = "log">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="http://127.0.0.1:5000/login?next=%2F">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+
+    <h2>Create New Grade</h2>
+    <label for="newName">Name:</label>
+    <input type="text" id="newName" name="newName"><br>
+    <label for="pssword">Password:</label>
+    <input type="text" id="pssword" name="pssword"><br>    
+
+    <label for="pssword2">Confirm password:</label>
+    <input type="text" id="pssword2" name="pssword2"><br>
+    <label for="status">Student, Teacher, Admin?:</label>
+    <input type="text" id="status" name = "status"><br>
+    
+  <button onclick="createAccount()">create account</button>
+</body>
+</html>
