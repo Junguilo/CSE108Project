@@ -58,9 +58,9 @@ def load_user(user_id):
 #Website
 @app.route('/index')
 @app.route('/')
-@login_required
+# @login_required
 def index():  # put application's code here
-    return "You're logged in"
+    return redirect('/login')
 
 @app.route('/login')
 def login_page():
@@ -74,7 +74,7 @@ def login_page():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('courses'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -83,7 +83,7 @@ def login():
             login_user(user)
             return redirect(url_for('courses'))
         else:
-            return render_template('login.html', message='Invalid username or password')
+            return render_template('loginP.html', message='Invalid username or password')
     return render_template('loginP.html')
 
 
@@ -123,18 +123,33 @@ def register_post():
 #         # return redirect(url_for('admin.index'))
 #         return 404
 
+# @app.route('/courses')
+# @login_required
+# def courses():
+#     user = User.query.filter_by(username=current_user.username).first()
+#     if user.is_teacher:
+#         # If the user is a teacher, render a different template
+#         return render_template('teachLog.html', courses=user.courses)
+#     else:
+        
+#         # If the user is a student, render the studLog.html template
+#         user_courses = UserCourse.query.filter_by(user_id=user.id).all()
+#         return render_template('studLog.html', user_courses=user_courses)
+
 @app.route('/courses')
 @login_required
 def courses():
     user = User.query.filter_by(username=current_user.username).first()
     if user.is_teacher:
         # If the user is a teacher, render a different template
-        return render_template('teachLog.html', courses=user.courses)
+        courses = Course.query.filter_by(teacher=user.username).all()  # Query courses taught by the teacher
+        return render_template('teachLog.html', courses=courses)
     else:
-        
         # If the user is a student, render the studLog.html template
         user_courses = UserCourse.query.filter_by(user_id=user.id).all()
-        return render_template('studLog.html', user_courses=user_courses)
+        courses = [uc.course for uc in user_courses]  # Extract courses associated with the student
+        return render_template('studLog.html', courses=courses)
+
 
 
 # @app.route('/all-courses')
