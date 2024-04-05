@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, redirect, url_for, request, render_template, jsonify
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib.sqla import ModelView
@@ -18,7 +18,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    is_teacher = db.Column(db.Boolean, default=False)  
+    is_teacher = db.Column(db.Boolean, default=False) 
+    # is_admin = db.Column(db.Boolean, default = False) 
 
     def check_password(self, password):
         return self.password == password
@@ -62,10 +63,6 @@ def index():  # put application's code here
 def login_page():
     return render_template('loginP.html')
 
-@app.route('/create-account')
-def create_account():
-    return render_template('createAcc.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -79,6 +76,26 @@ def login():
             return redirect(url_for('index'))
         return render_template('login.html', message='Invalid username or password')
     return render_template('login.html')
+
+
+
+@app.route('/register')
+def register():
+    return render_template('createAcc.html')
+
+@app.route('/register', methods=['POST'])
+def register_post():
+    data = request.json
+    print("Received JSON data:", data)  
+    username = data.get('username')
+    password = data.get('password')
+    is_teacher = data.get('is_teacher', False)
+    if username is None or password is None:
+        return jsonify({'error': 'Missing username or password'}), 400
+    new_user = User(username=username, password=password, is_teacher = is_teacher)
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'User added successfully'}), 201
 
 @app.route('/logout')
 @login_required
@@ -107,24 +124,3 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
-
-# create acct
-# @app.route('/create-account')
-# @login_required
-# def create_account():
-#     return render_template('createAcc.html')
-
-
-
-
-# @app.route('/login', methods=['POST'])
-# def login():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('index'))
-#     user = User.query.filter_by(username=request.form['username']).first()
-#     if user is None or not user.check_password(request.form['password']):
-#          return redirect(url_for('login'))
-#     login_user(user)
-#     return redirect(url_for('index'))
-
