@@ -44,7 +44,7 @@ class UserCourse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
-    is_teacher = db.Column(db.Boolean, default=False)  # Indicates if the user is the teacher of the course
+    # is_teacher = db.Column(db.Boolean, default=False)  # Indicates if the user is the teacher of the course
     grade = db.Column(db.Integer)
 
 admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
@@ -104,22 +104,36 @@ def register_post():
     db.session.commit()
     return jsonify({'message': 'User added successfully'}), 201
 
+# @app.route('/courses')
+# @login_required
+# def courses():
+#     user = User.query.filter_by(username=current_user.username).first()
+#     if user.role == 'student':
+#         return render_template('studLog.html', courses=user.courses)
+#     elif user.role == 'teacher':
+#         return render_template('teachLog.html', courses=user.courses)
+#     else:
+#         # return redirect(url_for('admin.index'))
+#         return 404
+
 @app.route('/courses')
 @login_required
 def courses():
     user = User.query.filter_by(username=current_user.username).first()
-    if user.role == 'student':
-        return render_template('student_courses.html', courses=user.courses)
-    elif user.role == 'teacher':
-        return render_template('teacher_courses.html', courses=user.courses)
+    if user.is_teacher:
+        # If the user is a teacher, render a different template
+        return render_template('teachLog.html', courses=user.courses)
     else:
-        return redirect(url_for('admin.index'))
+        # If the user is a student, render the studLog.html template
+        user_courses = UserCourse.query.filter_by(user_id=user.id).all()
+        return render_template('studLog.html', user_courses=user_courses)
 
-@app.route('/all-courses')
-@login_required
-def all_courses():
-    courses = Course.query.all()
-    return render_template('all_courses.html', courses=courses)
+
+# @app.route('/all-courses')
+# @login_required
+# def all_courses():
+#     courses = Course.query.all()
+#     return render_template('all_courses.html', courses=courses)
 
 #Admins need to Create, Read, Update, Delete Data in DB
 

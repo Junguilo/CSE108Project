@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Courses</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Student Courses</h2>
+
+<table>
+  <tr>
+    <th>Course Name</th>
+    <th>Teacher</th>
+    <th>Time</th>
+    <th>Students Enrolled</th>
+  </tr>
+  {% for user_course in user_courses %}
+  <tr>
+    <td>{{ user_course.course.name }}</td>
+    <td>{{ user_course.course.teacher }}</td>
+    <td>{{ user_course.course.time }}</td>
+    <td>{{ user_course.course.current_students }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+</body>
+</html>
