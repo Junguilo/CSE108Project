@@ -3,6 +3,7 @@ from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
+#import pandas
 #im scared abt the midterm
 #me too :( I think i will fail 
 
@@ -18,7 +19,7 @@ login_manager.login_view = 'login'
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db lowkey.String(100), unique=True, nullable=False)
+    username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     is_teacher = db.Column(db.Boolean, default=False) 
     # is_admin = db.Column(db.Boolean, default = False) 
@@ -144,8 +145,12 @@ def createCourse():
         return render_template('createCourse.html', message="Successfully added Course!")
     return render_template('createCourse.html')
 
+#Takes in the xlsx file and hopefully puts it into our db 
 #@app.route('/updateCourses', methods=['GET'])
 #def updateCourse():
+#    file = "/home/june/Documents/Code/UCM Programming/CSE108/CSE108Project/Enrollment example data for Lab8.xlsx"
+#    data = pandas.read_excel(file)
+#    return data.to_html()
 
 
 if __name__ == '__main__':
