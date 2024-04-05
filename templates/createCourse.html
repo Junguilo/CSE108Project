@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Management System</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='web.css') }}">
+    <script src="{{ url_for('static', filename='loginP.js') }}"></script>
+</head>
+<body class = "log">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/login">Home</a></li>
+            </ul>
+            <ul>
+                <li><a href="/createCourses">Create Course</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+
+    <h2>Create New Account</h2>
+    <form method="post">
+        <label for="name">Course Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="teacher">Teacher:</label><br>
+        <input type="text" id="teacher" name="teacher"><br>
+        <label for="time">Time:</label><br>
+        <input type="text" id="time" name="time"><br>
+        <label for="currStudents">Current Students:</label><br>
+        <input type="text" id="currStudents" name="currStudents"><br>
+        <label for="capacity">Capacity:</label><br>
+        <input type="text" id="capacity" name="capacity"><br>
+        <button type="submit">create account</button>
+    </form>
+</body>
+</html>

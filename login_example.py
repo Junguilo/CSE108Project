@@ -10,6 +10,7 @@ app.config['SECRET_KEY'] = 'super_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+#Database Information
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -53,6 +54,7 @@ admin.add_view(ModelView(Course, db.session))
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+#Website
 @app.route('/index')
 @app.route('/')
 @login_required
@@ -77,7 +79,11 @@ def login():
         return render_template('login.html', message='Invalid username or password')
     return render_template('login.html')
 
-
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route('/register')
 def register():
@@ -97,12 +103,6 @@ def register_post():
     db.session.commit()
     return jsonify({'message': 'User added successfully'}), 201
 
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
 @app.route('/courses')
 @login_required
 def courses():
@@ -119,6 +119,27 @@ def courses():
 def all_courses():
     courses = Course.query.all()
     return render_template('all_courses.html', courses=courses)
+
+#Create Courses Page - For Admin
+@app.route('/createCourses', methods=['GET','POST'])
+def createCourse():
+
+    #if will only run if we click button
+    if request.method == 'POST':
+        #Get all information added for course db
+        courseName = request.form['name']
+        teacher = request.form['teacher']
+        time = request.form['time']
+        currStudents = request.form['currStudents']
+        capacity = request.form['capacity']
+
+        newCourse = Course(name = courseName, teacher = teacher, time = time,
+                            current_students = currStudents, capacity = capacity)
+        db.session.add(newCourse)
+        db.session.commit()
+        #Sends us back to the website if successful
+        return render_template('createCourse.html', message="Successfully added Course!")
+    return render_template('createCourse.html')
 
 if __name__ == '__main__':
     with app.app_context():
