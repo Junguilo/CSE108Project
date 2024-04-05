@@ -66,6 +66,11 @@ def index():  # put application's code here
 def login_page():
     return render_template('loginP.html')
 
+
+
+####################
+# WORK HERE
+####################
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -76,9 +81,11 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
             login_user(user)
-            return redirect(url_for('index'))
-        return render_template('login.html', message='Invalid username or password')
-    return render_template('login.html')
+            return redirect(url_for('courses'))
+        else:
+            return render_template('login.html', message='Invalid username or password')
+    return render_template('loginP.html')
+
 
 @app.route('/logout')
 @login_required
@@ -124,6 +131,7 @@ def courses():
         # If the user is a teacher, render a different template
         return render_template('teachLog.html', courses=user.courses)
     else:
+        
         # If the user is a student, render the studLog.html template
         user_courses = UserCourse.query.filter_by(user_id=user.id).all()
         return render_template('studLog.html', user_courses=user_courses)
