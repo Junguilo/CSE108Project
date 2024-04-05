@@ -73,8 +73,8 @@ def login_page():
 ####################
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('courses'))
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('courses'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -110,31 +110,6 @@ def register_post():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'User added successfully'}), 201
-
-# @app.route('/courses')
-# @login_required
-# def courses():
-#     user = User.query.filter_by(username=current_user.username).first()
-#     if user.role == 'student':
-#         return render_template('studLog.html', courses=user.courses)
-#     elif user.role == 'teacher':
-#         return render_template('teachLog.html', courses=user.courses)
-#     else:
-#         # return redirect(url_for('admin.index'))
-#         return 404
-
-# @app.route('/courses')
-# @login_required
-# def courses():
-#     user = User.query.filter_by(username=current_user.username).first()
-#     if user.is_teacher:
-#         # If the user is a teacher, render a different template
-#         return render_template('teachLog.html', courses=user.courses)
-#     else:
-        
-#         # If the user is a student, render the studLog.html template
-#         user_courses = UserCourse.query.filter_by(user_id=user.id).all()
-#         return render_template('studLog.html', user_courses=user_courses)
 
 @app.route('/courses')
 @login_required

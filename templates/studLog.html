@@ -20,25 +20,22 @@
     </style>
 </head>
 <body>
-
-<h2>Student Courses</h2>
-
-<table>
-  <tr>
-    <th>Course Name</th>
-    <th>Teacher</th>
-    <th>Time</th>
-    <th>Students Enrolled</th>
-  </tr>
-  {% for user_course in user_courses %}
-  <tr>
-    <td>{{ user_course.course.name }}</td>
-    <td>{{ user_course.course.teacher }}</td>
-    <td>{{ user_course.course.time }}</td>
-    <td>{{ user_course.course.current_students }}</td>
-  </tr>
-  {% endfor %}
-</table>
-
+    <h2>Student Courses</h2>
+    <table>
+        <tr>
+            <th>Course Name</th>
+            <th>Teacher</th>
+            <th>Time</th>
+            <th>Students Enrolled</th>
+        </tr>
+        {% for user_course in user_courses %}
+        <tr>
+            <td>{{ user_course.course.name }}</td>
+            <td>{{ user_course.course.teacher }}</td>
+            <td>{{ user_course.course.time }}</td>
+            <td>{{ user_course.course.current_students }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
