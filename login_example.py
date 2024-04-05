@@ -3,7 +3,6 @@ from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
-#import pandas
 #im scared abt the midterm
 #me too :( I think i will fail 
 
@@ -123,7 +122,7 @@ def all_courses():
     return render_template('all_courses.html', courses=courses)
 
 #Admins need to Create, Read, Update, Delete Data in DB
-#so i did not create this for nothing yipee
+
 #Create Courses Page - For Admin
 @app.route('/createCourses', methods=['GET','POST'])
 def createCourse():
@@ -145,12 +144,8 @@ def createCourse():
         return render_template('createCourse.html', message="Successfully added Course!")
     return render_template('createCourse.html')
 
-#Takes in the xlsx file and hopefully puts it into our db 
-#@app.route('/updateCourses', methods=['GET'])
-#def updateCourse():
-#    file = "/home/june/Documents/Code/UCM Programming/CSE108/CSE108Project/Enrollment example data for Lab8.xlsx"
-#    data = pandas.read_excel(file)
-#    return data.to_html()
+#Add Student to Course
+#@app.route('/addStudent', methods=['POST'])
 
 
 if __name__ == '__main__':
