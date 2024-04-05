@@ -127,13 +127,13 @@ def courses():
 
 
 
-# @app.route('/all-courses')
-# @login_required
-# def all_courses():
-#     courses = Course.query.all()
-#     return render_template('all_courses.html', courses=courses)
+@app.route('/all-courses')
+@login_required
+def all_courses():
+    courses = Course.query.all()
+    return render_template('all_courses.html', courses=courses)
 
-#Admins need to Create, Read, Update, Delete Data in DB
+# Admins need to Create, Read, Update, Delete Data in DB
 
 #Create Courses Page - For Admin
 @app.route('/createCourses', methods=['GET','POST'])
