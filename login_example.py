@@ -3,7 +3,7 @@ from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
-
+#im scared abt the midterm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super_secret_key'
