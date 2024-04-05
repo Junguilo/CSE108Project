@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_admin.contrib.sqla import ModelView
 from flask_login import UserMixin, LoginManager, login_user, login_required, current_user, logout_user
 #im scared abt the midterm
+#me too :( I think i will fail 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'super_secret_key'
@@ -17,7 +18,7 @@ login_manager.login_view = 'login'
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), unique=True, nullable=False)
+    username = db.Column(db lowkey.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     is_teacher = db.Column(db.Boolean, default=False) 
     # is_admin = db.Column(db.Boolean, default = False) 
@@ -120,6 +121,8 @@ def all_courses():
     courses = Course.query.all()
     return render_template('all_courses.html', courses=courses)
 
+#Admins need to Create, Read, Update, Delete Data in DB
+#so i did not create this for nothing yipee
 #Create Courses Page - For Admin
 @app.route('/createCourses', methods=['GET','POST'])
 def createCourse():
@@ -140,6 +143,10 @@ def createCourse():
         #Sends us back to the website if successful
         return render_template('createCourse.html', message="Successfully added Course!")
     return render_template('createCourse.html')
+
+#@app.route('/updateCourses', methods=['GET'])
+#def updateCourse():
+
 
 if __name__ == '__main__':
     with app.app_context():
