@@ -21,6 +21,9 @@
 </head>
 <body>
     <h1>All Courses</h1>
+    {% if message%}
+        {{message}}
+    {% endif%}
     <table>
         <thead>
             <tr>
@@ -30,6 +33,7 @@
                 <th>Time</th>
                 <th>Current Students</th>
                 <th>Capacity</th>
+                <th>Enroll in Course</th>
             </tr>
         </thead>
         <tbody>
@@ -41,6 +45,12 @@
                 <td>{{ course.time }}</td>
                 <td>{{ course.current_students }}</td>
                 <td>{{ course.capacity }}</td>
+                <td> <!-- Grabs the course ID associated when you press enroll, to add to student -->
+                    <form action="/enroll_course" method="POST">
+                    <input type="hidden" name="course_id" value="{{course.id}}">
+                    <button type="submit">Enroll</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

@@ -33,7 +33,11 @@ class Course(db.Model):
     time = db.Column(db.String(100), nullable=False)
     current_students = db.Column(db.Integer, default=0)
     capacity = db.Column(db.Integer, nullable=False)
-    #students = db.relationship('User', secondary='enrollment', backref='courses')
+
+    #relationShip with UserCourse
+    #Usually the Parent will have this line rather than the children 
+    #We can get all child objects(users) through this way 
+    users = db.relationship("User", secondary="user_course" ,backref="Course")
     
 class UserCourse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,6 +45,10 @@ class UserCourse(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
     # is_teacher = db.Column(db.Boolean, default=False)  # Indicates if the user is the teacher of the course
     grade = db.Column(db.Integer)
+
+    #define relationship to easily access objects
+    user = db.relationship("User", backref="user_courses")
+    course = db.relationship("Course", backref="course_users")
 
 #Admin , we can go to the admin page with /admin
 #We do not need any special html that comes with it
@@ -125,6 +133,47 @@ def all_courses():
     courses = Course.query.all()
     return render_template('all_courses.html', courses=courses)
 
+#AddStudent2Course Helper Functions
+def getCourseID(course_name):
+    course = Course.query.filter_by(name=course_name).first()
+    if course:
+        return course.id
+    else:
+        return None
+    
+def getUserID(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return user.id
+    else:
+        return None
+    
+#Add Student To Course if logged in
+@app.route('/enroll_course', methods=['POST'])
+def enrollCourse():
+    courseID = request.form['course_id']
+    userID = getUserID( current_user.username )
+    courses = Course.query.all()
+    
+    #print(courseID)  Checking if our button returns the ids we want
+    #print(getUserID(current_user.username))
+    user = User.query.get(userID)
+    course = Course.query.get(courseID)
+
+    if course and user:
+        #Check if we are already enrolled in course
+        if user in course.users:
+            return render_template('all_courses.html', courses=courses, message="User already in Course")
+        #add the user to the course
+        course.users.append(user)
+        course.current_students += 1
+        course.capacity -= 1
+        db.session.commit()
+        return render_template('all_courses.html', courses=courses,message="User added to Course")
+    else:
+        return render_template('all_courses.html', courses=courses,message="User or Course not found")
+    #return render_template('all_courses.html', courses=courses)
+
 # Admins need to Create, Read, Update, Delete Data in DB
 
 #Create Courses Page - For Admin
@@ -147,10 +196,6 @@ def createCourse():
         #Sends us back to the website if successful
         return render_template('createCourse.html', message="Successfully added Course!")
     return render_template('createCourse.html')
-
-#Add Student to Course
-#@app.route('/addStudent', methods=['POST'])
-
 
 if __name__ == '__main__':
     with app.app_context():
