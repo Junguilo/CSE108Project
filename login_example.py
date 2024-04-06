@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = 'super_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-#Database Information
+#Database Information & Classes
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -33,13 +33,8 @@ class Course(db.Model):
     time = db.Column(db.String(100), nullable=False)
     current_students = db.Column(db.Integer, default=0)
     capacity = db.Column(db.Integer, nullable=False)
-#     students = db.relationship('User', secondary='enrollment', backref='courses')
-
-# enrollment = db.Table('enrollment',
-#     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
-#     db.Column('course_id', db.Integer, db.ForeignKey('course.id'), primary_key=True)
-# )
-
+    #students = db.relationship('User', secondary='enrollment', backref='courses')
+    
 class UserCourse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -48,6 +43,7 @@ class UserCourse(db.Model):
     grade = db.Column(db.Integer)
 
 #Admin , we can go to the admin page with /admin
+#We do not need any special html that comes with it
 admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Course, db.session))
@@ -57,18 +53,10 @@ admin.add_view(ModelView(UserCourse, db.session))
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-#Website
-@app.route('/index')
 @app.route('/')
-# @login_required
-def index():  # put application's code here
-    return redirect('/login')
-
 @app.route('/login')
 def login_page():
     return render_template('loginP.html')
-
-
 
 ####################
 # WORK HERE
@@ -95,6 +83,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+# Add User to DB 
 @app.route('/register')
 def register():
     return render_template('createAcc.html')
@@ -113,6 +102,7 @@ def register_post():
     db.session.commit()
     return jsonify({'message': 'User added successfully'}), 201
 
+#Show Enrolled courses by Students or Taught Courses by Professor
 @app.route('/courses')
 @login_required
 def courses():
@@ -128,7 +118,7 @@ def courses():
         return render_template('studLog.html', courses=courses)
 
 
-
+#Show all courses
 @app.route('/all-courses')
 @login_required
 def all_courses():
