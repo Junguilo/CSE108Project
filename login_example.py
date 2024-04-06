@@ -47,9 +47,11 @@ class UserCourse(db.Model):
     # is_teacher = db.Column(db.Boolean, default=False)  # Indicates if the user is the teacher of the course
     grade = db.Column(db.Integer)
 
+#Admin , we can go to the admin page with /admin
 admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Course, db.session))
+admin.add_view(ModelView(UserCourse, db.session))
 
 @login_manager.user_loader
 def load_user(user_id):
