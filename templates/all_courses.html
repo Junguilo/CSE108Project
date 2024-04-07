@@ -34,7 +34,7 @@
                 <th>Time</th>
                 <th>Current Students</th>
                 <th>Capacity</th>
-                <th>Enroll in Course</th>
+                <th>Enroll/Unenroll</th>
             </tr>
         </thead>
         <tbody>
@@ -49,7 +49,11 @@
                 <td> <!-- Grabs the course ID associated when you press enroll, to add to student -->
                     <form action="/enroll_course" method="POST">
                     <input type="hidden" name="course_id" value="{{course.id}}">
-                    <button type="submit">Enroll</button>
+                    {% if user in course.users %}
+                        <button type="submit">Unenroll</button>
+                    {% else %}
+                        <button type="submit">Enroll</button>
+                    {% endif %}
                     </form>
                 </td>
             </tr>

@@ -142,7 +142,10 @@ def courses():
 @login_required
 def all_courses():
     courses = Course.query.all()
-    return render_template('all_courses.html', courses=courses)
+    user = User.query.filter_by(username=current_user.username).first()
+    enrolled_courses = UserCourse.query.filter_by(user_id=user.id).all()
+    user_courseIDs = [enrolled_course.course_id for enrolled_course in enrolled_courses]
+    return render_template('all_courses.html', courses=courses, user_courses=user_courseIDs)
 
 #AddStudent2Course Helper Functions
 def getCourseID(course_name):
@@ -165,10 +168,11 @@ def getUserID(username):
 def enrollCourse():
     courseID = request.form['course_id']
     userID = getUserID( current_user.username )
+
+    #We still use this to list all courses
     courses = Course.query.all()
     
     #print(courseID)  Checking if our button returns the ids we want
-    #print(getUserID(current_user.username))
     user = User.query.get(userID)
     course = Course.query.get(courseID)
 
@@ -180,16 +184,16 @@ def enrollCourse():
             course.current_students -= 1
             course.capacity += 1
             db.session.commit()
-            return render_template('all_courses.html', courses=courses, message="Removed User from Course")
+            return render_template('all_courses.html', courses=courses, message="Removed User from Course", user=user)
         
         #add the user to the course
         course.users.append(user)
         course.current_students += 1
         course.capacity -= 1
         db.session.commit()
-        return render_template('all_courses.html', courses=courses,message="User added to Course")
+        return render_template('all_courses.html', courses=courses,message="User added to Course", user=user)
     else:
-        return render_template('all_courses.html', courses=courses,message="User or Course not found")
+        return render_template('all_courses.html', courses=courses,message="User or Course not found", user=user)
     #return render_template('all_courses.html', courses=courses)
 
 # Admins need to Create, Read, Update, Delete Data in DB
