@@ -121,8 +121,23 @@ def courses():
         return render_template('teachLog.html', courses=courses)
     else:
         # If the user is a student, render the studLog.html template
+
+        #Takes all the courses that is enrolled by the user 
         user_courses = UserCourse.query.filter_by(user_id=user.id).all()
-        courses = [uc.course for uc in user_courses]  # Extract courses associated with the student
+
+
+        print("User Courses:", user_courses)
+
+        courses = []
+        #course = Course.query.get(courseID)
+        for i in user_courses:
+            print(i)
+            course = Course.query.get(i.course_id)
+            if course:  # Check if the course exists
+                print(course.name)
+                courses.append(course)  # Append the Course object to the list
+
+        #courses = [uc.course for uc in user_courses]  # Extract courses associated with the student
         return render_template('studLog.html', courses=courses)
 
 

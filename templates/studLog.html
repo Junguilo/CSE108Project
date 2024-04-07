@@ -28,12 +28,12 @@
             <th>Time</th>
             <th>Students Enrolled</th>
         </tr>
-        {% for user_course in user_courses %}
+        {% for course in courses %}
         <tr>
-            <td>{{ user_course.course.name }}</td>
-            <td>{{ user_course.course.teacher }}</td>
-            <td>{{ user_course.course.time }}</td>
-            <td>{{ user_course.course.current_students }}</td>
+            <td>{{ course.name }}</td>
+            <td>{{ course.teacher }}</td>
+            <td>{{ course.time }}</td>
+            <td>{{ course.current_students }}</td>
         </tr>
         {% endfor %}
     </table>
