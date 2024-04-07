@@ -143,9 +143,7 @@ def courses():
 def all_courses():
     courses = Course.query.all()
     user = User.query.filter_by(username=current_user.username).first()
-    enrolled_courses = UserCourse.query.filter_by(user_id=user.id).all()
-    user_courseIDs = [enrolled_course.course_id for enrolled_course in enrolled_courses]
-    return render_template('all_courses.html', courses=courses, user_courses=user_courseIDs)
+    return render_template('all_courses.html', courses=courses, user = user)
 
 #AddStudent2Course Helper Functions
 def getCourseID(course_name):
