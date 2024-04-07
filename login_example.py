@@ -35,7 +35,7 @@ class Course(db.Model):
     capacity = db.Column(db.Integer, nullable=False)
 
     #relationShip with UserCourse
-    #Usually the Parent will have this line rather than the children 
+    #Usually the Parent will have this line than the children 
     #We can get all child objects(users) through this way 
     users = db.relationship("User", secondary="user_course" ,backref="Course")
     
