@@ -121,6 +121,7 @@ def courses():
         return render_template('teachLog.html', courses=courses)
     else:
         # If the user is a student, render the studLog.html template
+
         #Takes all the courses that is enrolled by the user 
         user_courses = UserCourse.query.filter_by(user_id=user.id).all()
 
@@ -160,6 +161,7 @@ def getUserID(username):
     
 #Add Student To Course if logged in
 @app.route('/enroll_course', methods=['POST'])
+@login_required
 def enrollCourse():
     courseID = request.form['course_id']
     userID = getUserID( current_user.username )
@@ -173,7 +175,13 @@ def enrollCourse():
     if course and user:
         #Check if we are already enrolled in course
         if user in course.users:
-            return render_template('all_courses.html', courses=courses, message="User already in Course")
+            #Del course from users if they are already enrolled
+            course.users.remove(user)
+            course.current_students -= 1
+            course.capacity += 1
+            db.session.commit()
+            return render_template('all_courses.html', courses=courses, message="Removed User from Course")
+        
         #add the user to the course
         course.users.append(user)
         course.current_students += 1
