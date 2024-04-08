@@ -26,6 +26,7 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return self.password == password
 
+"""
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -38,7 +39,29 @@ class Course(db.Model):
     #Usually the Parent will have this line rather than the children 
     #We can get all child objects(users) through this way 
     users = db.relationship("User", secondary="user_course" ,backref="Course")
+"""
+class Course(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    teacher = db.Column(db.String(100), nullable=False)
+    time = db.Column(db.String(100), nullable=False)
+    current_students = db.Column(db.Integer, default=0)
+    capacity = db.Column(db.Integer, nullable=False)
+
+    #relationShip with UserCourse
+    #Usually the Parent will have this line rather than the children 
+    #We can get all child objects(users) through this way 
+    users = db.relationship("User", secondary="user_course" ,backref="Course")
+    grades = db.relationship("Grade", backref="Course")
     
+class Grade(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
+    grade = db.Column(db.Integer, nullable=False)
+
+    #grade = db.relationship("User", backref="user_courses")
+
 class UserCourse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -216,6 +239,41 @@ def createCourse():
         #Sends us back to the website if successful
         return render_template('createCourse.html', message="Successfully added Course!")
     return render_template('createCourse.html')
+
+#Teacher seeing students in each course
+@app.route('/course/<int:course_id>')
+@login_required
+def course_detail(course_id):
+    course = Course.query.get(course_id)
+    students = User.query.join(User.user_courses).filter(UserCourse.course_id == course_id).all()
+    student_grades = {}  # Dictionary to store student grades
+    for student in students:
+        student_grade = Grade.query.filter_by(user_id=student.id, course_id=course_id).first()
+        student_grades[student.id] = student_grade.grade
+    return render_template('course_detail.html', course=course, students=students, student_grades=student_grades)
+
+@app.route('/grade/edit/<int:user_id>/<int:course_id>', methods=['GET', 'POST'])
+@login_required
+def edit_grade(user_id, course_id):
+    if request.method == 'POST':
+        print("Student ID:", user_id)  # Print student ID for debugging
+        print("Course ID:", course_id)  # Print course ID for debugging
+        print(request.form)  # Print form data for debugging
+        grade = request.form['grade']
+        student = User.query.get(user_id)
+        course = Course.query.get(course_id)
+        print("Received grade:", grade)  # Print the grade for debugging
+        student_grade = Grade.query.filter_by(user_id=user_id, course_id=course_id).first()
+        if student_grade:
+            student_grade.grade = int(grade)  # Convert grade to integer
+            db.session.commit()  # Commit changes to the database
+            print("Grade updated successfully")  # Print success message for debugging
+        else:
+            student_grade = Grade(user_id=user_id, course_id=course_id, grade=int(grade))  # Convert grade to integer
+            db.session.add(student_grade)
+            db.session.commit()
+            print("New grade added successfully")  # Print success message for debugging
+    return redirect(url_for('course_detail', course_id=course_id))  # Redirect to course detail page after updating gra
 
 if __name__ == '__main__':
     with app.app_context():
