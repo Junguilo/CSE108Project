@@ -58,7 +58,7 @@ class Grade(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'), nullable=False)
-    grade = db.Column(db.Integer, nullable=False)
+    grade = db.Column(db.Integer, nullable=False, default=0)
 
     #grade = db.relationship("User", backref="user_courses")
 
