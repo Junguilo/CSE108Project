@@ -249,7 +249,10 @@ def course_detail(course_id):
     student_grades = {}  # Dictionary to store student grades
     for student in students:
         student_grade = Grade.query.filter_by(user_id=student.id, course_id=course_id).first()
-        student_grades[student.id] = student_grade.grade
+        if student_grade:
+            student_grades[student.id] = student_grade.grade
+        else:
+            student_grades[student.id] = 0
     return render_template('course_detail.html', course=course, students=students, student_grades=student_grades)
 
 @app.route('/grade/edit/<int:user_id>/<int:course_id>', methods=['GET', 'POST'])
@@ -269,10 +272,13 @@ def edit_grade(user_id, course_id):
             db.session.commit()  # Commit changes to the database
             print("Grade updated successfully")  # Print success message for debugging
         else:
-            student_grade = Grade(user_id=user_id, course_id=course_id, grade=int(grade))  # Convert grade to integer
-            db.session.add(student_grade)
-            db.session.commit()
-            print("New grade added successfully")  # Print success message for debugging
+            if grade:
+                student_grade = Grade(user_id=user_id, course_id=course_id, grade=int(grade))  # Convert grade to integer
+                db.session.add(student_grade)
+                db.session.commit()
+                print("New grade added successfully")  # Print success message for debugging
+            else:
+                print("No grade provided")
     return redirect(url_for('course_detail', course_id=course_id))  # Redirect to course detail page after updating gra
 
 if __name__ == '__main__':
