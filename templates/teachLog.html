@@ -4,6 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Courses</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid black;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #002856;; /* blue color */
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: white;
+        }
+
+        a {
+            color: #002856; /* blue color for links */
+            text-decoration: none; /* remove underline */
+        }
+
+        a:hover {
+            text-decoration: underline; /* underline on hover */
+        }
+        .logout {
+                position: fixed;
+                top: 10px; /* Adjust top distance */
+                right: 10px; /* Adjust right distance */
+                padding: 10px 20px;
+                background-color: whitesmoke;
+                color: black;
+                text-decoration: none; /* Remove default underline */
+                border-radius: 4px;
+        }
+        body{
+            background-color: bisque;
+        }
+        h1 {
+            text-decoration: underline;
+        }   
+
+    </style>
 </head>
 <body>
     <h1>My Courses</h1>
@@ -27,5 +75,6 @@
             {% endfor %}
         </tbody>
     </table>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
 </body>
 </html>

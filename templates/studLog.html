@@ -8,15 +8,49 @@
         table {
             border-collapse: collapse;
             width: 100%;
+            background-color: white;
         }
+
         th, td {
             border: 1px solid black;
-            padding: 8px;
             text-align: left;
+            padding: 8px;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #002856; /* blue color */
+            color: white;
         }
+
+        tr:nth-child(even) {
+            background-color: white;
+        }
+
+        a {
+            color: #002856; /* blue color for links */
+            text-decoration: none; /* remove underline */
+        }
+
+        a:hover {
+            text-decoration: underline; /* underline on hover */
+        }
+        /* Style the logout link */
+        .logout {
+                position: fixed;
+                top: 10px; /* Adjust top distance */
+                right: 10px; /* Adjust right distance */
+                padding: 10px 20px;
+                background-color: whitesmoke;
+                color: black;
+                text-decoration: none; /* Remove default underline */
+                border-radius: 4px;
+        }
+        body{
+            background-color: bisque;
+        }
+        h2 {
+            text-decoration: underline;
+        } 
     </style>
 </head>
 <body>
@@ -38,6 +72,6 @@
         {% endfor %}
     </table>
     <button onclick="window.location.href='/all-courses'">see all clases</button>
-
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
 </body>
 </html>
