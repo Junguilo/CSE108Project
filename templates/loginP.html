@@ -7,29 +7,27 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='web.css') }}">
     <script src="{{ url_for('static', filename='loginP.js') }}"></script>
 </head>
-<body class = "log">
-    <header>
-        <nav>
-            <ul>
-                <li><a href="/login">Home</a></li>
-            </ul>
-        </nav>
-    </header>
-    
-
-    <form action ="/login" method = "post">
-        <label for="username">Name:</label>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">Password:</label>
-        <input type="text" id="password" name="password"><br>
-        <button type ="submit">Log In</button>
-    </form>
-
-
-    <!-- <button onclick="verifyIdentity()">Log In</button> -->
-    
-    
-<button onclick="window.location.href='/register'">create account</button>
-
+<body>
+    <div class="container"> <!-- Added container div -->
+        <!-- <header>
+            <nav>
+                <ul>
+                    Navigation links can go here if needed
+                </ul>
+            </nav>
+        </header> -->
+        
+        <div class="login-cont">
+            <h2>Welcome to Convas</h2>
+            <form action="/login" method="post">
+                <label for="username">Name:</label>
+                <input type="text" id="username" name="username"><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"><br> <!-- Changed input type to password -->
+                <button type="submit">Log In</button>
+            </form>
+            <button onclick="window.location.href='/register'">Create Account</button>
+        </div>
+    </div>
 </body>
 </html>
