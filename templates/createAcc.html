@@ -4,37 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade Management System</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='web.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='create.css') }}">
     <script src="{{ url_for('static', filename='loginP.js') }}"></script>
 </head>
-<body class = "log">
-    <header>
-        <nav>
-            <ul>
-                <li><a href="/login">Home</a></li>
-            </ul>
-            <ul>
-                <li><a href="/createCourses">Create Course</a></li>
-            </ul>
-        </nav>
-    </header>
-    
+<body>
 
-    <h2>Create New Account</h2>
-    <label for="username">Name:</label>
-    <input type="text" id="username" name="username"><br>
+<header class="header">
+    <a href="/login">Home</a>
+</header>
 
-    <label for="password">Password:</label>
-    <input type="text" id="password" name="password"><br>    
+<div class="container">
+    <div class="login-cont">
+        <h2>Create New Account</h2>
+        <div class="form-group">
+            <label for="username">Name:</label>
+            <input type="text" id="username" name="username"><br>
+        </div>
 
-    <!-- <label for="pssword2">Confirm password:</label>
-    <input type="text" id="pssword2" name="pssword2"><br> -->
-    <!-- <label for="status">Student, Teacher, Admin?:</label>
-    <input type="text" id="status" name = "status"><br> -->
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br>
+        </div>
 
-    <label for="is_teacher">Are you a teacher?</label>
-    <input type="checkbox" id="is_teacher" name="is_teacher"><br>
-    
-  <button onclick="createAccount()">create account</button>
+        <div class="form-group">
+            <label for="is_teacher">Are you a teacher?</label>
+            <input type="checkbox" id="is_teacher" name="is_teacher"><br>
+        </div>
+        
+        <button onclick="createAccount()">Create Account</button>
+    </div>
+</div>
+
 </body>
 </html>

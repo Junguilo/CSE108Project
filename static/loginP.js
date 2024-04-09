@@ -31,6 +31,10 @@ function createAccount() {
         body: JSON.stringify(data)
     })
     .then(response => response.json())
-    .then(data => console.log('Success:', data))
+    .then(data => {
+        console.log('Success:', data);
+        // Redirect to login page after account creation
+        window.location.href = "/login";
+    })
     .catch(error => console.error('Error:', error));
 }
