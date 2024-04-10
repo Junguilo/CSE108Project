@@ -79,6 +79,7 @@ admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Course, db.session))
 admin.add_view(ModelView(UserCourse, db.session))
+admin.add_view(ModelView(Grade, db.session))
 
 @login_manager.user_loader
 def load_user(user_id):
