@@ -19,8 +19,14 @@ body {
 
 header {
     background-color: #f0f0f0; /* Background color for navigation */
-    padding: 10px 0; /* Add some padding */
+    padding: 10px; /* Add some padding */
     border-radius: 10px; /* Add rounded corners */
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 nav ul {
